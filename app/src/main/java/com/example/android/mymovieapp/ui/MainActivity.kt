@@ -1,4 +1,4 @@
-package com.example.android.mymovieapp
+package com.example.android.mymovieapp.ui
 
 import android.app.SearchManager
 import android.content.Context
@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.mymovieapp.R
 import com.example.android.mymovieapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

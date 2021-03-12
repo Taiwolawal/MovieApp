@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/movies"
+        android:enabled="true"
+        android:icon="@drawable/baseline_theaters_white_18"
+        android:title="@string/movies"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/shows"
+        android:enabled="true"
+        android:title="@string/tv"
+        android:icon="@drawable/baseline_video_label_white_18"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/watchlist"
+        android:enabled="true"
+        android:icon="@drawable/baseline_star_white_18"
+        android:title="@string/watchlist"
+        app:showAsAction="ifRoom" />
+
+</menu>

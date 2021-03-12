@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/popular"
+            style="@style/headings_in_fragment" />
+
+        <TextView
+            android:text="@string/most_popular_tv_shows"
+            style="@style/subheadings_in_fragment" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/popular_tv_shows"
+            style="@style/Recyclerview_fragment" />
+
+        <TextView
+            android:text="@string/top_rated"
+            style="@style/headings_in_fragment" />
+
+        <TextView
+            android:text="@string/highest_rated_tv_shows_of_all_time"
+            style="@style/subheadings_in_fragment" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/top_rated_tv_shows"
+            style="@style/Recyclerview_fragment" />
+
+        <TextView
+            android:text="@string/on_air"
+            style="@style/headings_in_fragment" />
+
+        <TextView
+            android:text="@string/currently_airing_tv_shows"
+            style="@style/subheadings_in_fragment" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upcoming_movies"
+            style="@style/Recyclerview_fragment" />
+
+
+
+
+
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
