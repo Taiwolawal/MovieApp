@@ -5,9 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.example.android.mymovieapp.R
 import com.example.android.mymovieapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,12 +20,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
         setSupportActionBar(findViewById(R.id.movie_toolbar))
-
-        bottomNavigationView =  binding.bottomNavView
         bottomNavigationView.setOnNavigationItemReselectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.movies -> moviesFragment()
