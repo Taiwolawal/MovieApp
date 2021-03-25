@@ -1,5 +1,8 @@
 package com.example.android.mymovieapp.networking
 
+import com.example.android.mymovieapp.Success
+import com.example.android.mymovieapp.model.Movies
+import com.example.android.mymovieapp.model.TvShow
 import com.example.android.mymovieapp.responses.TvShowResponse
 import com.example.android.mymovieapp.util.API_KEY
 import com.example.android.mymovieapp.util.BASE_URL
@@ -21,52 +24,73 @@ object TvShowRepository {
        api = retrofit.create(Api::class.java)
     }
 
-    fun getPopularTvShows(page: Int = 1){
+    fun getPopularTvShows(page: Int = 1, onSuccess: (tvShow: List<TvShow>) -> Unit, onError: ()-> Unit ){
         val popularTvShows = api.getPopularTvShows(API_KEY, page)
         popularTvShows.enqueue(object : Callback<TvShowResponse>{
             override fun onResponse(
                 call: Call<TvShowResponse>,
                 response: Response<TvShowResponse>
             ) {
-                TODO("Not yet implemented")
+                if (response.isSuccessful){
+                    val responseBody = response.body()
+                    if(responseBody != null){
+                        onSuccess.invoke(responseBody.tvShows)
+                    }else{
+                        onError.invoke()
+                    }
+                }
             }
 
             override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })
     }
 
-    fun getTopRatedTvShows(page: Int = 1){
+    fun getTopRatedTvShows(page: Int = 1, onSuccess: (tvShow: List<TvShow>) -> Unit, onError: ()-> Unit){
         val topRatedTvShow = api.getTopRatedTvShows(API_KEY, page)
         topRatedTvShow.enqueue(object : Callback<TvShowResponse>{
             override fun onResponse(
                 call: Call<TvShowResponse>,
                 response: Response<TvShowResponse>
             ) {
-                TODO("Not yet implemented")
+                if (response.isSuccessful){
+                    val responseBody = response.body()
+                    if(responseBody != null){
+                        onSuccess.invoke(responseBody.tvShows)
+                    }else{
+                        onError.invoke()
+                    }
+                }
             }
 
             override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })
     }
 
-    fun getOnAirTvShows(page: Int = 1){
+    fun getOnAirTvShows(page: Int = 1, onSuccess: (tvShow: List<TvShow>) -> Unit, onError: ()-> Unit ){
         val onAirTvShow = api.getOnAirTvShows(API_KEY, page)
         onAirTvShow.enqueue(object : Callback<TvShowResponse>{
             override fun onResponse(
                 call: Call<TvShowResponse>,
                 response: Response<TvShowResponse>
             ) {
-                TODO("Not yet implemented")
+                if (response.isSuccessful){
+                    val responseBody = response.body()
+                    if(responseBody != null){
+                        onSuccess.invoke(responseBody.tvShows)
+                    }else{
+                        onError.invoke()
+                    }
+                }
             }
 
             override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })

@@ -1,6 +1,8 @@
 package com.example.android.mymovieapp.networking
 
 import android.util.Log
+import com.example.android.mymovieapp.Success
+import com.example.android.mymovieapp.model.Movies
 import com.example.android.mymovieapp.responses.MoviesResponse
 import com.example.android.mymovieapp.util.API_KEY
 import com.example.android.mymovieapp.util.BASE_URL
@@ -26,6 +28,8 @@ object MovieRepository {
         val searchedMovies = api.searchMovie(API_KEY, query)
         searchedMovies.enqueue(object : Callback<MoviesResponse> {
             override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
+                    val responseBody = response.body()
+                responseBody?.results
 
             }
 
@@ -36,52 +40,73 @@ object MovieRepository {
         })
     }
 
-    fun getTopRatedMovies(page: Int = 1){
+    fun getTopRatedMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
         val topRatedMovies = api.getTopRatedMovies(API_KEY, page)
         topRatedMovies.enqueue(object: Callback<MoviesResponse>{
             override fun onResponse(
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                TODO("Not yet implemented")
+               if(response.isSuccessful){
+                  val responseBody = response.body()
+                   if(responseBody != null){
+                       onSuccess.invoke(responseBody.results)
+                   } else {
+                       onError.invoke()
+                   }
+
+               } else {
+                   onError.invoke()
+               }
             }
 
             override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })
     }
 
-    fun getUpcomingMovies(page: Int = 1){
+    fun getUpcomingMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
         val upComingMovies = api.getUpcomingMovies(API_KEY, page)
         upComingMovies.enqueue(object : Callback<MoviesResponse>{
             override fun onResponse(
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                TODO("Not yet implemented")
+                val responseBody = response.body()
+                if (responseBody != null){
+                    onSuccess.invoke(responseBody.results)
+                }
+                else{
+                    onError.invoke()
+                }
             }
 
             override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })
     }
 
-    fun getPopularMovies(page: Int = 1){
+    fun getPopularMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
         val popularMovies = api.getPopularMovies(API_KEY,page)
         popularMovies.enqueue(object: Callback<MoviesResponse>{
             override fun onResponse(
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                TODO("Not yet implemented")
+                val responseBody  = response.body()
+                if (responseBody != null){
+                    onSuccess.invoke(responseBody.results)
+                } else {
+                    onError.invoke()
+                }
             }
 
             override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                onError.invoke()
             }
 
         })

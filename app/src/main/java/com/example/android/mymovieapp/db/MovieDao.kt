@@ -16,7 +16,7 @@ interface MovieDao {
     fun insert(movies: Movies)
 
     @Query("SELECT * FROM Movies WHERE id = :id LIMIT 1")
-    fun findById(id: Long): Movies
+    fun findById(id: Long): Movies?
 
     @Delete
     fun  deleteMovie(movie: Movies)

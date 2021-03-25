@@ -76,8 +76,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     //ViewModel & LiveData
-    implementation 'androidx.activity:activity-ktx:1.2.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
 
 
     // Retrofit

@@ -43,7 +43,7 @@
             style="@style/subheadings_in_fragment" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/upcoming_movies"
+            android:id="@+id/on_air_tv_shows"
             style="@style/Recyclerview_fragment" />
 
 
