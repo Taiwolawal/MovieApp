@@ -8,13 +8,18 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.android.mymovieapp.databinding.ActivityMainBinding
+import com.example.android.mymovieapp.ui.MoviesFragment
+import com.example.android.mymovieapp.ui.TvShowFragment
+import com.example.android.mymovieapp.util.MOVIES_FRAGMENT
+import com.example.android.mymovieapp.util.TV_SHOWS_FRAGMENT
+import com.example.android.mymovieapp.util.WATCH_LIST_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var searchMenuItem: MenuItem
-    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,32 +27,61 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(findViewById(R.id.movie_toolbar))
-
-
-        bottomNavigationView.setOnNavigationItemReselectedListener { menuItem ->
+        bottomNavView = findViewById(R.id.bottom_nav_view)
+        bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
-                R.id.movies -> moviesFragment()
-                R.id.shows -> showsFragment()
-                R.id.watchlist -> watchListFragment()
+                R.id.movies -> showMoviesFragment()
+                R.id.shows -> showTvShowsFragment()
+                R.id.watchlist -> showWatchListFragment()
             }
-
+            return@setOnNavigationItemSelectedListener true
         }
-
-
-
-
+        showMoviesFragment()
     }
 
-    private fun watchListFragment() {
-
+    private fun showMoviesFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = supportFragmentManager.findFragmentByTag(MOVIES_FRAGMENT)
+        val tvShowsFragment = supportFragmentManager.findFragmentByTag(TV_SHOWS_FRAGMENT)
+        val watchListFragment = supportFragmentManager.findFragmentByTag(WATCH_LIST_FRAGMENT)
+        tvShowsFragment?.let { transaction.hide(it) }
+        watchListFragment?.let { transaction.hide(it) }
+        if (fragment == null){
+            transaction.add(R.id.fragment_container, MoviesFragment(), MOVIES_FRAGMENT)
+        } else{
+            transaction.show(fragment)
+        }
+        transaction.commit()
     }
 
-    private fun showsFragment() {
-
+    private fun showTvShowsFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = supportFragmentManager.findFragmentByTag(TV_SHOWS_FRAGMENT)
+        val moviesFragment = supportFragmentManager.findFragmentByTag(MOVIES_FRAGMENT)
+        val watchListFragment = supportFragmentManager.findFragmentByTag(WATCH_LIST_FRAGMENT)
+        moviesFragment?.let { transaction.hide(it) }
+        watchListFragment?.let { transaction.hide(it) }
+        if (fragment == null){
+            transaction.add(R.id.fragment_container, TvShowFragment(), TV_SHOWS_FRAGMENT)
+        } else{
+            transaction.show(fragment)
+        }
+        transaction.commit()
     }
 
-    private fun moviesFragment() {
-
+    private fun showWatchListFragment() {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = supportFragmentManager.findFragmentByTag(WATCH_LIST_FRAGMENT)
+        val moviesFragment = supportFragmentManager.findFragmentByTag(MOVIES_FRAGMENT)
+        val tvShowsFragment = supportFragmentManager.findFragmentByTag(TV_SHOWS_FRAGMENT)
+        moviesFragment?.let { transaction.hide(it) }
+        tvShowsFragment?.let { transaction.hide(it) }
+        if (fragment == null){
+            transaction.add(R.id.fragment_container, TvShowFragment(), WATCH_LIST_FRAGMENT)
+        } else{
+            transaction.show(fragment)
+        }
+        transaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.android.mymovieapp.R
+import com.example.android.mymovieapp.databinding.FragmentWatchListBinding
 
 
 class WatchListFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentWatchListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,9 @@ class WatchListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_watch_list, container, false)
+//        return inflater.inflate(R.layout.fragment_watch_list, container, false)
+        _binding = FragmentWatchListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {

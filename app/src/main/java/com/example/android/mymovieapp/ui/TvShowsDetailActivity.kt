@@ -10,6 +10,7 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.android.mymovieapp.R
+import com.example.android.mymovieapp.databinding.ActivityTvShowsDetailBinding
 import com.example.android.mymovieapp.db.AppDatabase
 import com.example.android.mymovieapp.model.TvShow
 
@@ -23,6 +24,7 @@ const val TV_SHOW_ID = "extra_tv_show_id"
 
 class TvShowsDetailActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityTvShowsDetailBinding
     private lateinit var backdrop: ImageView
     private lateinit var poster: ImageView
     private lateinit var title: TextView
@@ -41,15 +43,17 @@ class TvShowsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tv_shows_detail)
+        binding = ActivityTvShowsDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        setContentView(R.layout.activity_tv_shows_detail)
 
-        backdrop = findViewById(R.id.tv_show_backdrop)
-        poster = findViewById(R.id.tv_show_poster)
-        title = findViewById(R.id.tv_show_title)
-        rating = findViewById(R.id.tv_show_rating)
-        releaseDate = findViewById(R.id.tv_show_release_date)
-        overview = findViewById(R.id.tv_show_overview)
-        addToWatchList = findViewById(R.id.add_to_watch_list)
+        backdrop = binding.tvShowBackdrop
+        poster = binding.tvShowPoster
+        title = binding.tvShowTitle
+        rating = binding.tvShowRating
+        releaseDate = binding.tvShowReleaseDate
+        overview = binding.tvShowOverview
+        addToWatchList = binding.addToWatchList
 
         val extras = intent.extras
         if (extras != null) {

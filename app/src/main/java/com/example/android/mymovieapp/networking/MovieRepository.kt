@@ -1,6 +1,8 @@
 package com.example.android.mymovieapp.networking
 
 import android.util.Log
+import com.example.android.mymovieapp.Failure
+import com.example.android.mymovieapp.Result
 import com.example.android.mymovieapp.Success
 import com.example.android.mymovieapp.model.Movies
 import com.example.android.mymovieapp.responses.MoviesResponse
@@ -11,6 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Error
 
 object MovieRepository {
 
@@ -24,92 +27,32 @@ object MovieRepository {
         api = retrofit.create(Api::class.java)
     }
 
-    fun searchMovies(query: String) {
+    suspend fun searchMovies(query: String): Result<List<Movies>> = try {
         val searchedMovies = api.searchMovie(API_KEY, query)
-        searchedMovies.enqueue(object : Callback<MoviesResponse> {
-            override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
-                    val responseBody = response.body()
-                responseBody?.results
-
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                Log.e("SearchMovies", "onFailure", t)
-            }
-
-        })
+        Success(searchedMovies.results)
+    } catch (error: Throwable){
+        Failure(error)
     }
 
-    fun getTopRatedMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
+     suspend fun getTopRatedMovies(page: Int = 1): Result<List<Movies>> = try{
         val topRatedMovies = api.getTopRatedMovies(API_KEY, page)
-        topRatedMovies.enqueue(object: Callback<MoviesResponse>{
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-               if(response.isSuccessful){
-                  val responseBody = response.body()
-                   if(responseBody != null){
-                       onSuccess.invoke(responseBody.results)
-                   } else {
-                       onError.invoke()
-                   }
-
-               } else {
-                   onError.invoke()
-               }
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                onError.invoke()
-            }
-
-        })
+        Success(topRatedMovies.results)
+    } catch ( error: Throwable){
+        Failure(error)
     }
 
-    fun getUpcomingMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
+    suspend fun getUpcomingMovies(page: Int = 1): Result<List<Movies>> = try{
         val upComingMovies = api.getUpcomingMovies(API_KEY, page)
-        upComingMovies.enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-                val responseBody = response.body()
-                if (responseBody != null){
-                    onSuccess.invoke(responseBody.results)
-                }
-                else{
-                    onError.invoke()
-                }
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                onError.invoke()
-            }
-
-        })
+        Success(upComingMovies.results)
+    }catch (error: Throwable){
+        Failure(error)
     }
 
-    fun getPopularMovies(page: Int = 1, onSuccess: (movies: List<Movies>) -> Unit, onError: () -> Unit){
+    suspend fun getPopularMovies(page: Int = 1): Result<List<Movies>> = try{
         val popularMovies = api.getPopularMovies(API_KEY,page)
-        popularMovies.enqueue(object: Callback<MoviesResponse>{
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-                val responseBody  = response.body()
-                if (responseBody != null){
-                    onSuccess.invoke(responseBody.results)
-                } else {
-                    onError.invoke()
-                }
-            }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                onError.invoke()
-            }
-
-        })
+        Success(popularMovies.results)
+    } catch (error: Throwable){
+        Failure(error)
     }
 
 

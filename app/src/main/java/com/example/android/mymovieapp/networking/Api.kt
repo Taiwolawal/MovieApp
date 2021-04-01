@@ -10,46 +10,46 @@ import retrofit2.http.Query
 interface Api {
 
     @GET("search/movie")
-    fun searchMovie(
+    suspend fun searchMovie(
         @Query("api_key") api_key: String,
         @Query("query") q: String
-    ): Call<MoviesResponse>
+    ): MoviesResponse
 
     @GET("movie/top_rated")
-    fun getTopRatedMovies(
+    suspend fun getTopRatedMovies(
         @Query("api_key") api_key: String,
         @Query("page") page: Int
-    ): Call<MoviesResponse>
+    ):  MoviesResponse
 
     @GET("movie/popular")
-    fun getPopularMovies(
+    suspend fun getPopularMovies(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Call<MoviesResponse>
+    ):  MoviesResponse
 
 
     @GET("movie/upcoming")
-    fun getUpcomingMovies(
+    suspend fun getUpcomingMovies(
         @Query("api_key") api_Key: String,
         @Query("page") page: Int
-    ): Call<MoviesResponse>
+    ):  MoviesResponse
 
     @GET("tv/popular")
-    fun getPopularTvShows(
+    suspend fun getPopularTvShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Call<TvShowResponse>
+    ):  TvShowResponse
 
     @GET("tv/top_rated")
-    fun getTopRatedTvShows(
+    suspend  fun getTopRatedTvShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Call<TvShowResponse>
+    ):  TvShowResponse
 
     @GET("tv/on_the_air")
-    fun getOnAirTvShows(
+    suspend fun getOnAirTvShows(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
-    ): Call<TvShowResponse>
+    ):  TvShowResponse
 
 }

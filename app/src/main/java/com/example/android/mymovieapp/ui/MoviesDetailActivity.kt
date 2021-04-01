@@ -10,6 +10,7 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.android.mymovieapp.R
+import com.example.android.mymovieapp.databinding.ActivityMoviesDetailBinding
 import com.example.android.mymovieapp.db.AppDatabase
 import com.example.android.mymovieapp.model.Movies
 
@@ -23,6 +24,7 @@ const val MOVIE_ID = "extra_movie_id"
 
 class MoviesDetailActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMoviesDetailBinding
     private lateinit var backdrop: ImageView
     private lateinit var poster: ImageView
     private lateinit var title: TextView
@@ -42,15 +44,17 @@ class MoviesDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movies_detail)
+        binding = ActivityMoviesDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        //setContentView(R.layout.activity_movies_detail)
 
-        backdrop = findViewById(R.id.movie_backdrop)
-        poster = findViewById(R.id.movie_poster)
-        title = findViewById(R.id.movie_title)
-        rating = findViewById(R.id.movie_rating)
-        releaseDate = findViewById(R.id.release_date)
-        overview = findViewById(R.id.movie_overview)
-        addToWatchList = findViewById(R.id.add_to_watch_list)
+        backdrop = binding.movieBackdrop
+        poster = binding.moviePoster
+        title = binding.movieTitle
+        rating = binding.movieRating
+        releaseDate = binding.movieReleaseDate
+        overview = binding.movieOverview
+        addToWatchList = binding.addToWatchList
 
         val extras = intent.extras
         if(extras != null){

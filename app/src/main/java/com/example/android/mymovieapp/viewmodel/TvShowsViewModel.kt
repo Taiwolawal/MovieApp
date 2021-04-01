@@ -40,34 +40,19 @@ class TvShowsViewModel: ViewModel() {
         _onAirTvShows.value = tvShows
     }
 
-    fun getPopularTvShows(page: Int = 1) {
-        TvShowRepository.getPopularTvShows(
-            page,
-            ::onPopularTvShowsFetched,
-            ::onError
-        )
+    suspend fun getPopularTvShows(page: Int = 1) {
+        TvShowRepository.getPopularTvShows(page)
     }
 
-    fun getTopRatedTvShows(page: Int = 1) {
-        TvShowRepository.getTopRatedTvShows(
-            page,
-            ::onTopRatedTvShowsFetched,
-            ::onError
-        )
+    suspend fun getTopRatedTvShows(page: Int = 1) {
+        TvShowRepository.getTopRatedTvShows(page)
     }
 
-    fun getOnAirTvShows(page: Int = 1) {
+    suspend fun getOnAirTvShows(page: Int = 1) {
         TvShowRepository.getOnAirTvShows(
-            page,
-            ::onOnAirTvShowsFetched,
-            ::onError
+            page
         )
     }
 
-    init {
-        getPopularTvShows()
-        getTopRatedTvShows()
-        getOnAirTvShows()
-    }
 
 }

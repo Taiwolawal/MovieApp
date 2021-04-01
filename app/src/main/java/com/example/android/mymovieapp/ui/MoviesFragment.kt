@@ -2,22 +2,32 @@ package com.example.android.mymovieapp.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.mymovieapp.R
 import com.example.android.mymovieapp.adapter.MoviesAdapter
+import com.example.android.mymovieapp.databinding.FragmentMoviesBinding
 import com.example.android.mymovieapp.model.Movies
 import com.example.android.mymovieapp.viewmodel.MoviesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MoviesFragment : Fragment() {
+
+    private var _binding: FragmentMoviesBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView
+    private val binding get() = _binding!!
 
     private lateinit var popularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
@@ -38,66 +48,89 @@ class MoviesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_movies, container, false)
+//        val view =  inflater.inflate(R.layout.fragment_movies, container, false)
+        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        popularMovies = view.findViewById(R.id.popular_movies)
+        popularMovies = _binding!!.popularMovies
         popularMoviesLayoutMgr = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         popularMovies.layoutManager = popularMoviesLayoutMgr
         popularMoviesAdapter = MoviesAdapter(mutableListOf()){movie -> showMovieDetails(movie)  }
+        popularMovies.adapter = popularMoviesAdapter
 
-        topRatedMovies = view.findViewById(R.id.top_rated_movies)
+        topRatedMovies = _binding!!.topRatedMovies
         topRatedMoviesLayoutMgr = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         topRatedMovies.layoutManager = topRatedMoviesLayoutMgr
         topRatedMoviesAdapter = MoviesAdapter(mutableListOf()){movie -> showMovieDetails(movie)  }
+        topRatedMovies.adapter = topRatedMoviesAdapter
 
-        upComingMovies = view.findViewById(R.id.upcoming_movies)
+        upComingMovies = _binding!!.upcomingMovies
         upComingMoviesLayoutMgr = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        upComingMovies.layoutManager = topRatedMoviesLayoutMgr
+        upComingMovies.layoutManager = upComingMoviesLayoutMgr
         upComingMoviesAdapter = MoviesAdapter(mutableListOf()){movie -> showMovieDetails(movie)  }
+        upComingMovies.adapter = upComingMoviesAdapter
 
         return  view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.popularMovies.observe(this, Observer { movies ->
-            popularMoviesAdapter.appendMovies(movies)
-            attachPopularMoviesOnScrollListener()
-        })
+        
+            viewModel.popularMovies.observe(viewLifecycleOwner, { movies->
+                popularMoviesAdapter.appendMovies(movies)
+                attachPopularMoviesOnScrollListener()
+            })
 
-        viewModel.topRatedMovies.observe(this, Observer { movies ->
-            topRatedMoviesAdapter.appendMovies(movies)
-            attachTopRatedMoviesOnScrollListener()
-        })
 
-        viewModel.upComingMovies.observe(this, Observer { movies ->
-            upComingMoviesAdapter.appendMovies(movies)
-            attachUpcomingMoviesOnScrollListener()
-        })
-        viewModel.error.observe(this, Observer { onError() })
+
+           viewModel.popularMovies.observe(viewLifecycleOwner, { movies->
+               popularMoviesAdapter.appendMovies(movies)
+               attachPopularMoviesOnScrollListener()
+           })
+
+           viewModel.topRatedMovies.observe(viewLifecycleOwner, { movies ->
+               topRatedMoviesAdapter.appendMovies(movies)
+               attachTopRatedMoviesOnScrollListener()
+           })
+
+           viewModel.upComingMovies.observe(viewLifecycleOwner, { movies ->
+               upComingMoviesAdapter.appendMovies(movies)
+               attachUpcomingMoviesOnScrollListener()
+           })
+           viewModel.error.observe(viewLifecycleOwner, { onError() })
+
+
+
     }
 
     private fun attachPopularMoviesOnScrollListener() {
-        popularMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = popularMoviesLayoutMgr.itemCount
-                val visibleItemCount = popularMoviesLayoutMgr.childCount
-                val firstVisibleItem = popularMoviesLayoutMgr.findFirstVisibleItemPosition()
+        GlobalScope.launch(Dispatchers.Main) {
+            popularMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val totalItemCount = popularMoviesLayoutMgr.itemCount
+                    val visibleItemCount = popularMoviesLayoutMgr.childCount
+                    val firstVisibleItem = popularMoviesLayoutMgr.findFirstVisibleItemPosition()
 
-                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    popularMovies.removeOnScrollListener(this)
-                    popularMoviesPage++
-                    viewModel.getPopularMovies(popularMoviesPage)
+                    if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+                        popularMovies.removeOnScrollListener(this)
+                        Log.d("MoviesFragment", "Fetching top rated movies")
+                        popularMoviesPage++
+                        GlobalScope.launch(Dispatchers.Main) {
+                            viewModel.getPopularMovies(popularMoviesPage)
+                        }
+
+                    }
                 }
-            }
-        })
+            })
+        }
+
     }
 
     private fun attachTopRatedMoviesOnScrollListener() {
@@ -110,7 +143,10 @@ class MoviesFragment : Fragment() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     topRatedMovies.removeOnScrollListener(this)
                     topRatedMoviesPage++
-                    viewModel.getTopRatedMovies(topRatedMoviesPage)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        viewModel.getTopRatedMovies(topRatedMoviesPage)
+                    }
+
                 }
             }
         })
@@ -126,7 +162,12 @@ class MoviesFragment : Fragment() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     upComingMovies.removeOnScrollListener(this)
                     upComingMoviesPage++
-                    viewModel.getUpComingMovies(upComingMoviesPage)
+                    GlobalScope.launch (Dispatchers.Main){
+                        viewModel.getUpComingMovies(upComingMoviesPage)
+                    }
+
+
+
                 }
             }
         })
@@ -146,5 +187,10 @@ class MoviesFragment : Fragment() {
 
     private fun onError() {
         Toast.makeText(activity, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

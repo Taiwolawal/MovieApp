@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.android.mymovieapp.R
+import com.example.android.mymovieapp.databinding.ItemMovieBinding
 import com.example.android.mymovieapp.model.Movies
 
 class MoviesAdapter(
@@ -17,10 +18,12 @@ class MoviesAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.item_movie, parent, false)
-        return MovieViewHolder(view)
+//        val view = LayoutInflater
+//            .from(parent.context)
+//            .inflate(R.layout.item_movie, parent, false)
+//        return MovieViewHolder(view)
+        val binding = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+         return MovieViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MoviesAdapter.MovieViewHolder, position: Int) {
@@ -30,12 +33,15 @@ class MoviesAdapter(
     fun appendMovies(movies: List<Movies>){
         this.movies.addAll(movies)
         notifyItemRangeChanged(this.movies.size, movies.size - 1)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = movies.size
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val poster: ImageView = itemView.findViewById(R.id.item_movie_poster)
+//    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+     inner class MovieViewHolder(binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root){
+//        private val poster: ImageView = itemView.findViewById(R.id.item_movie_poster)
+    private val poster: ImageView = binding.itemMoviePoster
         fun bind(movie: Movies) {
             Glide.with(itemView)
                 .load("https://image.tmdb.org/t/p/w342${movie.posterPath}")

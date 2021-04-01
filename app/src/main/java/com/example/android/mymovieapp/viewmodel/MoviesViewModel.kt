@@ -40,21 +40,16 @@ class MoviesViewModel: ViewModel() {
         _upComingMovies.value = movies
     }
 
-    fun getPopularMovies(page: Int = 1){
-        MovieRepository.getPopularMovies(page, ::onPopularMoviesFetched, ::onError)
+    suspend fun getPopularMovies(page: Int = 1){
+        MovieRepository.getPopularMovies(page)
     }
 
-    fun getTopRatedMovies(page: Int = 1){
-        MovieRepository.getTopRatedMovies(page, ::onTopRatedMoviesFetched, ::onError)
+    suspend fun getTopRatedMovies(page: Int = 1){
+        MovieRepository.getTopRatedMovies(page)
     }
 
-    fun getUpComingMovies(page: Int = 1){
-        MovieRepository.getUpcomingMovies(page, ::onUpcomingMoviesFetched, ::onError)
+    suspend fun getUpComingMovies(page: Int = 1){
+        MovieRepository.getUpcomingMovies(page)
     }
 
-    init {
-        getPopularMovies()
-        getTopRatedMovies()
-        getUpComingMovies()
-    }
 }

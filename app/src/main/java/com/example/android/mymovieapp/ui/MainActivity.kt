@@ -23,10 +23,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(findViewById(R.id.movie_toolbar))
-        bottomNavView = findViewById(R.id.bottom_nav_view)
+//        setSupportActionBar(findViewById(R.id.movie_toolbar))
+        setSupportActionBar(binding.movieToolbar)
+
+//        bottomNavView = findViewById(R.id.bottom_nav_view)
+        bottomNavView = binding.bottomNavView
         bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.movies -> showMoviesFragment()
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
             return@setOnNavigationItemSelectedListener true
         }
+
         showMoviesFragment()
     }
 

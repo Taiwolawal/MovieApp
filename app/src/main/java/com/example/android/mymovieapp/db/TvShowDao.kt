@@ -1,12 +1,14 @@
 package com.example.android.mymovieapp.db
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.android.mymovieapp.model.Movies
 import com.example.android.mymovieapp.model.TvShow
 
+@Dao
 interface TvShowDao {
 
     @Query("SELECT * FROM TvShow")

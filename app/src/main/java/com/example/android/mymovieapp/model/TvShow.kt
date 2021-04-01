@@ -1,11 +1,12 @@
 package com.example.android.mymovieapp.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity
 data class TvShow(
-    @SerializedName("id") val id: Long,
+    @PrimaryKey val id: Long,
     @SerializedName("name") val name: String,
     @SerializedName("overview") val overview: String,
     @SerializedName("poster_path") val posterPath: String,
