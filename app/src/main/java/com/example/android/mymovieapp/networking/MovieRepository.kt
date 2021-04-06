@@ -34,26 +34,43 @@ object MovieRepository {
         Failure(error)
     }
 
-     suspend fun getTopRatedMovies(page: Int = 1): Result<List<Movies>> = try{
-        val topRatedMovies = api.getTopRatedMovies(API_KEY, page)
-        Success(topRatedMovies.results)
-    } catch ( error: Throwable){
-        Failure(error)
+//     suspend fun getTopRatedMovies(page: Int = 1):Result<List<Movies>> = try{
+//        val topRatedMovies = api.getTopRatedMovies(API_KEY, page)
+//        Success(topRatedMovies.results)
+//    } catch ( error: Throwable){
+//        Failure(error)
+//    }
+
+    suspend fun getTopRatedMovies(page: Int = 1): List<Movies> {
+        val topRatedMovies = api.getTopRatedMovies(API_KEY,page)
+        return topRatedMovies.results
     }
 
-    suspend fun getUpcomingMovies(page: Int = 1): Result<List<Movies>> = try{
+//    suspend fun getUpcomingMovies(page: Int = 1): Result<List<Movies>> = try{
+//        val upComingMovies = api.getUpcomingMovies(API_KEY, page)
+//        Success(upComingMovies.results)
+//    }catch (error: Throwable){
+//        Failure(error)
+//    }
+
+
+    suspend fun getUpComingMovies(page: Int = 1): List<Movies>{
         val upComingMovies = api.getUpcomingMovies(API_KEY, page)
-        Success(upComingMovies.results)
-    }catch (error: Throwable){
-        Failure(error)
+        return  upComingMovies.results
     }
 
-    suspend fun getPopularMovies(page: Int = 1): Result<List<Movies>> = try{
-        val popularMovies = api.getPopularMovies(API_KEY,page)
-        Success(popularMovies.results)
-    } catch (error: Throwable){
-        Failure(error)
+//    suspend fun getPopularMovies(page: Int = 1): Result<List<Movies>> = try{
+//        val popularMovies = api.getPopularMovies(API_KEY,page)
+//        Success(popularMovies.results)
+//    } catch (error: Throwable){
+//        Failure(error)
+//    }
+
+    suspend fun getPopularMovies(page: Int = 1): List<Movies>{
+        val popularMovies = api.getPopularMovies(API_KEY, page)
+        return  popularMovies.results
     }
+
 
 
 }

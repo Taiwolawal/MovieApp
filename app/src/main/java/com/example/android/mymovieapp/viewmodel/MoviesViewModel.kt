@@ -48,8 +48,8 @@ class MoviesViewModel: ViewModel() {
         MovieRepository.getTopRatedMovies(page)
     }
 
-    suspend fun getUpComingMovies(page: Int = 1){
-        MovieRepository.getUpcomingMovies(page)
+    suspend fun getUpComingMovies(page: Int = 1): List<Movies>{
+       return MovieRepository.getUpComingMovies(page)
     }
 
 }

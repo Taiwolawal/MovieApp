@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.mymovieapp.R
+import com.example.android.mymovieapp.Success
 import com.example.android.mymovieapp.adapter.MoviesAdapter
 import com.example.android.mymovieapp.databinding.FragmentMoviesBinding
 import com.example.android.mymovieapp.model.Movies
+import com.example.android.mymovieapp.networking.MovieRepository
 import com.example.android.mymovieapp.viewmodel.MoviesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -54,7 +56,7 @@ class MoviesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 //        val view =  inflater.inflate(R.layout.fragment_movies, container, false)
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -82,6 +84,10 @@ class MoviesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        getTopRatedMovies()
+        getPopularMovies()
+        getUpComingMovies()
         
             viewModel.popularMovies.observe(viewLifecycleOwner, { movies->
                 popularMoviesAdapter.appendMovies(movies)
@@ -192,5 +198,27 @@ class MoviesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getTopRatedMovies(){
+        GlobalScope.launch (Dispatchers.Main){
+            val result = MovieRepository.getTopRatedMovies(topRatedMoviesPage)
+            topRatedMoviesAdapter.appendMovies(result)
+        }
+    }
+
+    private fun getUpComingMovies(){
+        GlobalScope.launch (Dispatchers.Main){
+            val result = viewModel.getUpComingMovies(upComingMoviesPage)
+            upComingMoviesAdapter.appendMovies(result)
+           attachUpcomingMoviesOnScrollListener()
+        }
+    }
+
+    private fun getPopularMovies(){
+        GlobalScope.launch (Dispatchers.Main){
+            val result = MovieRepository.getPopularMovies(upComingMoviesPage)
+            popularMoviesAdapter.appendMovies(result)
+        }
     }
 }

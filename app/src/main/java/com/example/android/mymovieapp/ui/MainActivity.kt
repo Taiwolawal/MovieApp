@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         moviesFragment?.let { transaction.hide(it) }
         tvShowsFragment?.let { transaction.hide(it) }
         if (fragment == null){
-            transaction.add(R.id.fragment_container, TvShowFragment(), WATCH_LIST_FRAGMENT)
+            transaction.add(R.id.fragment_container, WatchListFragment(), WATCH_LIST_FRAGMENT)
         } else{
             transaction.show(fragment)
         }
