@@ -1,11 +1,11 @@
 package com.example.android.mymovieapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -46,7 +46,6 @@ class MoviesDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMoviesDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setContentView(R.layout.activity_movies_detail)
 
         backdrop = binding.movieBackdrop
         poster = binding.moviePoster
@@ -115,7 +114,7 @@ class MoviesDetailActivity : AppCompatActivity() {
         }
     }
 
-    private  val db: AppDatabase by lazy {
+    private val db: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "My MovieApp")
             .allowMainThreadQueries().build()
     }

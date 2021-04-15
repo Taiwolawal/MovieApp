@@ -1,21 +1,15 @@
 package com.example.android.mymovieapp.networking
 
-import android.util.Log
 import com.example.android.mymovieapp.Failure
 import com.example.android.mymovieapp.Result
 import com.example.android.mymovieapp.Success
 import com.example.android.mymovieapp.model.Movies
-import com.example.android.mymovieapp.responses.MoviesResponse
 import com.example.android.mymovieapp.util.API_KEY
 import com.example.android.mymovieapp.util.BASE_URL
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Error
 
-object MovieRepository {
+object MovieRepository{
 
     private val api: Api
 
@@ -25,6 +19,9 @@ object MovieRepository {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         api = retrofit.create(Api::class.java)
+
+
+
     }
 
     suspend fun searchMovies(query: String): Result<List<Movies>> = try {
@@ -32,39 +29,19 @@ object MovieRepository {
         Success(searchedMovies.results)
     } catch (error: Throwable){
         Failure(error)
-    }
 
-//     suspend fun getTopRatedMovies(page: Int = 1):Result<List<Movies>> = try{
-//        val topRatedMovies = api.getTopRatedMovies(API_KEY, page)
-//        Success(topRatedMovies.results)
-//    } catch ( error: Throwable){
-//        Failure(error)
-//    }
+
+    }
 
     suspend fun getTopRatedMovies(page: Int = 1): List<Movies> {
         val topRatedMovies = api.getTopRatedMovies(API_KEY,page)
         return topRatedMovies.results
     }
 
-//    suspend fun getUpcomingMovies(page: Int = 1): Result<List<Movies>> = try{
-//        val upComingMovies = api.getUpcomingMovies(API_KEY, page)
-//        Success(upComingMovies.results)
-//    }catch (error: Throwable){
-//        Failure(error)
-//    }
-
-
     suspend fun getUpComingMovies(page: Int = 1): List<Movies>{
         val upComingMovies = api.getUpcomingMovies(API_KEY, page)
         return  upComingMovies.results
     }
-
-//    suspend fun getPopularMovies(page: Int = 1): Result<List<Movies>> = try{
-//        val popularMovies = api.getPopularMovies(API_KEY,page)
-//        Success(popularMovies.results)
-//    } catch (error: Throwable){
-//        Failure(error)
-//    }
 
     suspend fun getPopularMovies(page: Int = 1): List<Movies>{
         val popularMovies = api.getPopularMovies(API_KEY, page)

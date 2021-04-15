@@ -1,13 +1,11 @@
 package com.example.android.mymovieapp.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.android.mymovieapp.R
 import com.example.android.mymovieapp.databinding.ItemMovieBinding
 import com.example.android.mymovieapp.model.Movies
 
@@ -18,10 +16,6 @@ class MoviesAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-//        val view = LayoutInflater
-//            .from(parent.context)
-//            .inflate(R.layout.item_movie, parent, false)
-//        return MovieViewHolder(view)
         val binding = ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
          return MovieViewHolder(binding)
     }

@@ -2,23 +2,17 @@ package com.example.android.mymovieapp.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.mymovieapp.R
 import com.example.android.mymovieapp.adapter.TvShowsAdapter
 import com.example.android.mymovieapp.databinding.FragmentTvShowBinding
 import com.example.android.mymovieapp.model.TvShow
 import com.example.android.mymovieapp.viewmodel.TvShowsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 class TvShowFragment : Fragment() {
@@ -42,23 +36,23 @@ class TvShowFragment : Fragment() {
 
     private lateinit var viewModel: TvShowsViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TvShowsViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-//        val view =  inflater.inflate(R.layout.fragment_tv_show, container, false)
+                              savedInstanceState: Bundle?): View {
+
         _binding = FragmentTvShowBinding.inflate(inflater, container, false)
-        val view = binding.root
 
         popularTvShows = _binding!!.popularTvShows
         popularTvShowsLayoutMgr = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         popularTvShows.layoutManager = popularTvShowsLayoutMgr
         popularTvShowsAdapter = TvShowsAdapter(mutableListOf()){tvShow -> showTvShowDetails(tvShow)  }
         popularTvShows.adapter = popularTvShowsAdapter
+
 
         topRatedTvShows = _binding!!.topRatedTvShows
         topRatedTvShowsLayoutMgr = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -73,30 +67,24 @@ class TvShowFragment : Fragment() {
         onAirTvShowsAdapter = TvShowsAdapter(mutableListOf()){tvShow -> showTvShowDetails(tvShow)  }
         onAirTvShows.adapter = onAirTvShowsAdapter
 
-        return  view
+        return  binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.popularTvShows.observe(viewLifecycleOwner, { tvShows ->
-            popularTvShowsAdapter.appendTvShows(tvShows)
+        getPopularTvShows()
+        getOnAirTvShows()
+        getTopRatedTvShows()
+
+    }
+
+    private fun getPopularTvShows(){
+        viewModel.getPopularTvShows(popularTvShowsPage)
+        viewModel.popularTvShows.observe(viewLifecycleOwner, {tvShow ->
+            popularTvShowsAdapter.appendTvShows(tvShow)
             attachPopularTvShowsOnScrollListener()
         })
-
-        viewModel.topRatedTvShows.observe(viewLifecycleOwner, { tvShows ->
-            topRatedTvShowsAdapter.appendTvShows(tvShows)
-            Log.e("Tv Top Rated", "Error")
-            attachTopRatedTvShowsOnScrollListener()
-        })
-
-        viewModel.onAirTvShows.observe(viewLifecycleOwner, { tvShows ->
-            onAirTvShowsAdapter.appendTvShows(tvShows)
-            Log.e("On Air Tv Show", "Error")
-            attachOnAirTvShowsOnScrollListener()
-        })
-
-        viewModel.error.observe(viewLifecycleOwner, {onError()})
     }
 
     private fun attachPopularTvShowsOnScrollListener() {
@@ -109,12 +97,17 @@ class TvShowFragment : Fragment() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     popularTvShows.removeOnScrollListener(this)
                     popularTvShowsPage++
-                    GlobalScope.launch(Dispatchers.Main) {
-                        viewModel.getPopularTvShows(popularTvShowsPage)
-                    }
-
+                    viewModel.getPopularTvShows(popularTvShowsPage)
                 }
             }
+        })
+    }
+
+    private fun getTopRatedTvShows(){
+        viewModel.getTopRatedTvShows(topRatedTvShowsPage)
+        viewModel.topRatedTvShows.observe(viewLifecycleOwner, {tvShow ->
+            topRatedTvShowsAdapter.appendTvShows(tvShow)
+            attachTopRatedTvShowsOnScrollListener()
         })
     }
 
@@ -128,12 +121,17 @@ class TvShowFragment : Fragment() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     topRatedTvShows.removeOnScrollListener(this)
                     topRatedTvShowsPage++
-                    GlobalScope.launch(Dispatchers.Main) {
-                        viewModel.getTopRatedTvShows(topRatedTvShowsPage)
-                    }
-
+                    viewModel.getTopRatedTvShows(topRatedTvShowsPage)
                 }
             }
+        })
+    }
+
+    private fun getOnAirTvShows(){
+        viewModel.getOnAirTvShows(onAirTvShowsPage)
+        viewModel.onAirTvShows.observe(viewLifecycleOwner, { tvShow ->
+            onAirTvShowsAdapter.appendTvShows(tvShow)
+            attachOnAirTvShowsOnScrollListener()
         })
     }
 
@@ -147,25 +145,19 @@ class TvShowFragment : Fragment() {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     onAirTvShows.removeOnScrollListener(this)
                     onAirTvShowsPage++
-                    GlobalScope.launch(Dispatchers.Main) {
-                        viewModel.getOnAirTvShows(onAirTvShowsPage)
-                    }
-
+                    viewModel.getOnAirTvShows(onAirTvShowsPage)
                 }
             }
         })
     }
 
-    private fun onError() {
-        Toast.makeText(activity, getString(R.string.error_fetch_movies), Toast.LENGTH_LONG)
-    }
 
     private fun showTvShowDetails(tvShow: TvShow) {
         val intent = Intent(activity, TvShowsDetailActivity::class.java)
         intent.putExtra(TV_SHOW_ID, tvShow.id)
         intent.putExtra(TV_SHOW_BACKDROP, tvShow.backdropPath)
         intent.putExtra(TV_SHOW_POSTER, tvShow.posterPath)
-        intent.putExtra(TV_SHOW_TITLE, tvShow.name)
+        intent.putExtra(TV_SHOW_TITLE, tvShow.title)
         intent.putExtra(TV_SHOW_RATING, tvShow.rating)
         intent.putExtra(TV_SHOW_RELEASE_DATE, tvShow.firstAirDate)
         intent.putExtra(TV_SHOW_OVERVIEW, tvShow.overview)
@@ -176,6 +168,11 @@ class TvShowFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
+
+
 
 
 }

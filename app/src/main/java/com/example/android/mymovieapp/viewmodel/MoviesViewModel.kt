@@ -1,10 +1,14 @@
 package com.example.android.mymovieapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.mymovieapp.model.Movies
 import com.example.android.mymovieapp.networking.MovieRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MoviesViewModel: ViewModel() {
 
@@ -20,36 +24,33 @@ class MoviesViewModel: ViewModel() {
     val upComingMovies: LiveData<List<Movies>>
     get() = _upComingMovies
 
-    private val _error = MutableLiveData<Boolean>()
-    val error: LiveData<Boolean>
-        get() = _error
 
-    private  fun onError(){
-        _error.value =true
+      fun getPopularMovies(page: Int = 1){
+         viewModelScope.launch {
+            val popularMovies =  MovieRepository.getPopularMovies(page)
+             Log.d("Popular", "getPopularMovies: $popularMovies")
+             _popularMovies.value = popularMovies
+         }
+
     }
 
-    private fun onPopularMoviesFetched(movies: List<Movies>) {
-        _popularMovies.value = movies
+      fun getTopRatedMovies(page: Int = 1) {
+         viewModelScope.launch {
+             val topRatedMovies = MovieRepository.getTopRatedMovies(page)
+             Log.d("Toprated", "getTopRatedMovies: $topRatedMovies")
+             _topRatedMovies.value = topRatedMovies
+         }
+
     }
 
-    private fun onTopRatedMoviesFetched(movies: List<Movies>) {
-        _topRatedMovies.value = movies
+      fun getUpComingMovies(page: Int = 1){
+       viewModelScope.launch(Dispatchers.IO){
+           val upComingMovies = MovieRepository.getUpComingMovies(page)
+           Log.d("Upcoming", "getUpComingMovies: $upComingMovies")
+           _upComingMovies.postValue(upComingMovies)
+       }
     }
 
-    private fun onUpcomingMoviesFetched(movies: List<Movies>) {
-        _upComingMovies.value = movies
-    }
 
-    suspend fun getPopularMovies(page: Int = 1){
-        MovieRepository.getPopularMovies(page)
-    }
-
-    suspend fun getTopRatedMovies(page: Int = 1){
-        MovieRepository.getTopRatedMovies(page)
-    }
-
-    suspend fun getUpComingMovies(page: Int = 1): List<Movies>{
-       return MovieRepository.getUpComingMovies(page)
-    }
 
 }

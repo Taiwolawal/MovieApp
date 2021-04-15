@@ -70,14 +70,14 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
 
     //Recyclerview
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
 
     // ViewModel and lifecycle support for kotlin
-    def versions_lifecycle = "2.2.0"
+    def versions_lifecycle = "2.1.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions_lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions_lifecycle"
 
